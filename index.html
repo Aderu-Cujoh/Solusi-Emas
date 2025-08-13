@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Solusi Emas — Premium Valuation for Your Gold</title>
+  <meta name="description" content="Layanan penilaian premium untuk semua kondisi emas. Penilaian transparan dan layanan personal." />
+
+  <!-- Tailwind (CDN) & Fonts (kept from original) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --gold:#cfa93b;
+      --gold-dark:#b8860b;
+      --navy:#0b2745;
+      --bg1:#0A0A0A;
+      --bg2:#2A2A2A;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: 'Montserrat', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:#fff;
+      background: linear-gradient(135deg,var(--bg1) 0%,var(--bg2) 100%);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Hero */
+    .hero{position:relative;min-height:88vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+    .hero-fallback{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(4,12,22,0.45), rgba(4,12,22,0.75));z-index:-1}
+
+    /* Buttons & cards */
+    .gold-btn{background:var(--gold);color:#081426;padding:.9rem 1.25rem;border-radius:.6rem;font-weight:700;box-shadow:0 8px 24px rgba(207,169,59,0.15)}
+    .gold-btn:hover{transform:translateY(-3px)}
+    .card-hover{transition:transform .28s cubic-bezier(.2,.9,.3,1),box-shadow .28s ease,border .28s ease}
+    .card-hover:hover{transform:translateY(-10px);box-shadow:0 18px 40px rgba(0,0,0,0.45);border:1px solid var(--gold)}
+
+    /* Section reveal */
+    .section-transition{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}
+    .section-transition.visible{opacity:1;transform:translateY(0)}
+
+    /* Spin icon styling (premium spin) */
+    .spin-icon {
+      display:inline-block;
+      width:48px;
+      height:48px;
+      line-height:48px;
+      text-align:center;
+      color: var(--gold);
+      transition: transform .32s ease, filter .2s ease;
+      will-change: transform;
+      /* slow continuous rotation */
+      animation: spin-slow 6s linear infinite;
+    }
+    .spin-icon:hover{
+      animation: spin-fast 0.9s linear infinite;
+      transform: scale(1.08);
+    }
+    @keyframes spin-slow { from{ transform: rotate(0deg);} to{ transform: rotate(360deg);} }
+    @keyframes spin-fast { from{ transform: rotate(0deg);} to{ transform: rotate(360deg);} }
+
+    /* smaller variant for mobile */
+    @media (max-width:640px){
+      .spin-icon{ width:40px; height:40px; line-height:40px; }
+    }
+
+    /* respects reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .spin-icon { animation: none !important; transform: none !important; }
+    }
+
+    /* Floating WA */
+    .wa-float{position:fixed;right:18px;bottom:18px;background:#25D366;color:#fff;padding:12px 14px;border-radius:999px;display:flex;gap:8px;align-items:center;z-index:60;box-shadow:0 12px 36px rgba(0,0,0,.18)}
+    .lightbox{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.86);z-index:80}
+    .lightbox img{max-width:92%;max-height:86vh;border-radius:8px}
+
+    /* responsive: hide video on mobile */
+    @media (max-width:760px){
+      .hero-video{display:none!important}
+      .hero-fallback{display:block!important}
+    }
+
+    /* Small helpers for inputs in calculator */
+    .input-field { width:100%; padding:.75rem; border-radius:.5rem; background:#111; color:#fff; border:1px solid rgba(255,255,255,0.06); }
+    .muted { color: #cbd5e1; }
+
+    /* simple focus styles for accessibility */
+    :focus { outline: 3px solid rgba(207,169,59,0.2); outline-offset: 2px; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="fixed top-0 left-0 right-0 z-40 bg-black/60">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <!-- Keep original brand text -->
+        <div class="text-2xl font-playfair font-bold text-yellow-400">Solusi Emas</div>
+        <div class="text-sm text-gray-300 hidden md:block">Apapun Kondisinya — Solusi Emas Jawabannya</div>
+      </div>
+      <nav aria-label="Main">
+        <a href="#types" class="text-yellow-400 hover:text-yellow-300 mr-4">Jenis</a>
+        <a href="#how" class="text-yellow-400 hover:text-yellow-300 mr-4">Cara Kerja</a>
+        <a href="#contact" class="text-yellow-400 hover:text-yellow-300 mr-4">Hubungi</a>
+        <!-- Instagram link (added) -->
+        <a href="https://instagram.com/solusiemas.ind" target="_blank" rel="noopener" class="text-yellow-400 hover:text-yellow-300">IG: @solusiemas.ind</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="mt-16">
+
+    <!-- HERO (unchanged text) -->
+    <section class="hero section-transition" role="banner" aria-label="Hero Solusi Emas">
+      <!-- Video: lazy-loaded by JS; replace assets as needed -->
+      <video
+        class="hero-video"
+        playsinline
+        muted
+        loop
+        preload="none"
+        poster="assets/hero-poster.jpg"
+        aria-hidden="true"
+        data-src-webm="assets/hero-video.webm"
+        data-src-mp4="assets/interstellar.mp4"
+      ></video>
+
+      <!-- fallback image (mobile / reduced-motion) -->
+      <img class="hero-fallback" src="assets/hero-poster.jpg" alt="Koleksi emas" aria-hidden="true" />
+
+      <!-- overlay -->
+      <div class="hero-overlay" aria-hidden="true"></div>
+
+      <!-- content -->
+      <div class="max-w-4xl px-6 py-12 text-center z-10">
+        <h1 id="heroHeadline" class="font-playfair font-bold text-4xl sm:text-5xl md:text-6xl leading-tight mb-4">
+          Premium Valuation for Your Gold
+        </h1>
+
+        <p id="heroDesc" class="text-lg sm:text-xl md:text-2xl mb-6 text-white/95">
+          Layanan penilaian premium untuk semua kondisi emas, hasil transparan, layanan personal.
+        </p>
+
+        <div class="flex justify-center gap-4 flex-wrap">
+          <a href="#contact" class="gold-btn inline-flex items-center gap-2">Hubungi Kami</a>
+          <a href="#calculator" class="inline-flex items-center gap-2 px-4 py-3 border border-white/10 rounded text-white hover:bg-white/5">Hitung Estimasi</a>
+        </div>
+
+        <div class="mt-6 flex justify-center gap-3 text-sm text-gray-300">
+          <span class="px-3 py-1 bg-black/30 rounded">Proses di Depan Anda</span>
+          <span class="px-3 py-1 bg-black/30 rounded">Pembayaran Transparan</span>
+          <span class="px-3 py-1 bg-black/30 rounded">Tanpa Potongan Tersembunyi</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICE TICKER (REMOVED live price — shows instruction) -->
+    <section class="bg-gradient-to-r from-black to-gray-900 py-3 section-transition" aria-hidden="false">
+      <div class="max-w-6xl mx-auto px-4 flex items-center justify-between">
+        <div class="text-white font-semibold">Harga Emas / gram</div>
+        <!-- No live numeric price — instruct user to contact for current market price -->
+        <div id="gold-price" class="text-yellow-300 font-bold">Hubungi kami untuk harga terkini</div>
+      </div>
+    </section>
+
+    <!-- TYPES (unchanged content) -->
+    <section id="types" class="py-16 section-transition">
+      <div class="max-w-6xl mx-auto px-4 text-center">
+        <h2 class="text-3xl md:text-4xl font-playfair font-bold text-yellow-400 mb-8">Jenis Emas yang Kami Terima</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <article class="card-hover p-6 bg-gray-900 rounded-lg">
+            <img src="assets/emas.jpg" alt="Emas batangan Antam/UBS" class="w-full h-44 object-cover rounded mb-4">
+            <h3 class="text-xl font-semibold text-yellow-400 mb-2">Emas Batangan</h3>
+            <p class="text-gray-300">Antam, UBS, atau merek lain — kami terima dengan penilaian transparan.</p>
+          </article>
+
+          <article class="card-hover p-6 bg-gray-900 rounded-lg">
+            <img src="assets/perhiasan.jpg" alt="Perhiasan emas" class="w-full h-44 object-cover rounded mb-4">
+            <h3 class="text-xl font-semibold text-yellow-400 mb-2">Perhiasan</h3>
+            <p class="text-gray-300">Perhiasan emas dalam kondisi apa pun, dengan atau tanpa surat.</p>
+          </article>
+
+          <article class="card-hover p-6 bg-gray-900 rounded-lg">
+            <img src="assets/emas-rusak.jpg" alt="Emas rusak" class="w-full h-44 object-cover rounded mb-4">
+            <h3 class="text-xl font-semibold text-yellow-400 mb-2">Emas Rusak</h3>
+            <p class="text-gray-300">Emas patah atau rusak tetap bernilai di tangan kami.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY (spin icons added - does not change text) -->
+    <section id="why" class="py-16 bg-gray-900 section-transition">
+      <div class="max-w-6xl mx-auto px-4 text-center">
+        <h2 class="text-3xl md:text-4xl font-playfair font-bold text-yellow-400 mb-8">Mengapa Memilih Kami?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="p-6 bg-black rounded-lg card-hover">
+            <!-- spin-icon (SVG inline) -->
+            <div class="spin-icon mx-auto mb-4" aria-hidden="true">
+              <!-- coin SVG -->
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"></circle>
+                <path d="M10.5 8.5h3v7h-3z" fill="currentColor"></path>
+              </svg>
+            </div>
+            <h4 class="text-xl font-semibold text-yellow-400 mb-2">Terima Semua Jenis Emas</h4>
+            <p class="text-gray-300">Emas rusak, tanpa surat, Antam, UBS, atau perhiasan — kami terima tanpa terkecuali.</p>
+          </div>
+
+          <div class="p-6 bg-black rounded-lg card-hover">
+            <div class="spin-icon mx-auto mb-4" aria-hidden="true">
+              <!-- magnify/eye SVG -->
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" stroke="currentColor" stroke-width="1.6" fill="none"></path>
+                <circle cx="12" cy="12" r="2.5" fill="currentColor"></circle>
+              </svg>
+            </div>
+            <h4 class="text-xl font-semibold text-yellow-400 mb-2">Proses Transparan</h4>
+            <p class="text-gray-300">Pengecekan & penilaian dilakukan langsung di depan Anda — semua langkah dijelaskan agar transparan.</p>
+          </div>
+
+          <div class="p-6 bg-black rounded-lg card-hover">
+            <div class="spin-icon mx-auto mb-4" aria-hidden="true">
+              <!-- money bag SVG -->
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                <path d="M8 7V6a4 4 0 1 1 8 0v1" stroke="currentColor" stroke-width="1.6" fill="none"></path>
+                <path d="M6 10h12l-1 8a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2l-1-8z" stroke="currentColor" stroke-width="1.6" fill="none"></path>
+              </svg>
+            </div>
+            <h4 class="text-xl font-semibold text-yellow-400 mb-2">Harga Kompetitif</h4>
+            <p class="text-gray-300">Memberikan penawaran harga kompetitif sesuai pasar, tanpa potongan tersembunyi.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW (spin icons added - no text change) -->
+    <section id="how" class="py-16 section-transition">
+      <div class="max-w-6xl mx-auto px-4 text-center">
+        <h2 class="text-3xl md:text-4xl font-playfair font-bold text-yellow-400 mb-8">Cara Kerja Kami</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="p-6 bg-gray-900 rounded-lg card-hover">
+            <div class="spin-icon mx-auto mb-4" aria-hidden="true">
+              <!-- phone SVG -->
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                <path d="M22 16.92V21a1 1 0 0 1-1.11 1A19 19 0 0 1 3 4.11 1 1 0 0 1 4 3h4.09a1 1 0 0 1 1 .75c.12.72.34 1.42.65 2.08a1 1 0 0 1-.24 1.06L8.91 9.91a14 14 0 0 0 5.09 5.09l1.02-1.02a1 1 0 0 1 1.06-.24c.66.31 1.36.53 2.08.65a1 1 0 0 1 .75 1V21z" stroke="currentColor" stroke-width="1.3" fill="none"></path>
+              </svg>
+            </div>
+            <h4 class="text-xl font-semibold text-yellow-400 mb-2">1. Hubungi Kami</h4>
+            <p class="text-gray-300">Kirim detail emas Anda via WhatsApp atau formulir kontak.</p>
+          </div>
+
+          <div class="p-6 bg-gray-900 rounded-lg card-hover">
+            <div class="spin-icon mx-auto mb-4" aria-hidden="true">
+              <!-- inspect SVG -->
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.5" fill="none"></path>
+                <circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.5" fill="none"></circle>
+              </svg>
+            </div>
+            <h4 class="text-xl font-semibold text-yellow-400 mb-2">2. Pengecekan & Penilaian</h4>
+            <p class="text-gray-300">Pengecekan dilakukan langsung oleh tim kami dan hasilnya dijelaskan di depan Anda.</p>
+          </div>
+
+          <div class="p-6 bg-gray-900 rounded-lg card-hover">
+            <div class="spin-icon mx-auto mb-4" aria-hidden="true">
+              <!-- handshake SVG -->
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                <path d="M2 20l5-5 5 5 10-10" stroke="currentColor" stroke-width="1.5" fill="none"></path>
+                <path d="M7 13l3-3" stroke="currentColor" stroke-width="1.5" fill="none"></path>
+              </svg>
+            </div>
+            <h4 class="text-xl font-semibold text-yellow-400 mb-2">3. Terima Penawaran</h4>
+            <p class="text-gray-300">Memberikan penawaran berdasarkan pengecekan — Anda pilih apakah menerima atau tidak.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALCULATOR & CONTACT (updated: manual price input, no live price/fallback) -->
+    <section id="contact" class="py-16 bg-gray-900 section-transition">
+      <div class="max-w-6xl mx-auto px-4 text-center">
+        <h2 class="text-3xl md:text-4xl font-playfair font-bold text-yellow-400 mb-4">Hubungi Kami</h2>
+        <p class="text-gray-300 mb-6">Siap menyerahkan emas Anda? Hitung estimasi harga atau langsung chat via WhatsApp.</p>
+
+        <!-- Calculator card -->
+        <div id="calculator" class="max-w-lg mx-auto bg-black rounded-lg p-6 mb-8 card-hover" aria-labelledby="calculatorHeading">
+          <h3 id="calculatorHeading" class="text-xl font-semibold text-yellow-400 mb-4">Kalkulator Estimasi Harga</h3>
+
+          <!-- NEW: user provides current market price per gram (no hardcoded/fallback price anywhere) -->
+          <label for="marketPrice" class="sr-only">Harga per gram (Rp)</label>
+          <input id="marketPrice" type="number" min="0" step="1" placeholder="Harga per gram (Rp) — masukkan manual" class="input-field mb-3" aria-label="Harga per gram">
+
+          <label class="sr-only" for="weight">Berat</label>
+          <input id="weight" type="number" min="0" step="0.01" placeholder="Berat emas (gram)" class="input-field mb-3" aria-label="Berat emas">
+
+          <label class="sr-only" for="karat">Karat</label>
+          <select id="karat" class="input-field mb-3" aria-label="Kadar karat">
+            <option value="24">24K</option>
+            <option value="22">22K</option>
+            <option value="18">18K</option>
+          </select>
+
+          <label class="sr-only" for="condition">Kondisi</label>
+          <select id="condition" class="input-field mb-3" aria-label="Kondisi emas">
+            <option value="normal">Utuh / Normal</option>
+            <option value="rusak">Rusak / Pecah</option>
+          </select>
+
+          <button id="calcBtn" class="w-full gold-btn py-3 rounded font-semibold">Hitung Estimasi</button>
+
+          <div id="calcResult" class="mt-4 text-yellow-300" aria-live="polite"></div>
+          <div class="mt-3 text-sm muted">Catatan: masukkan harga pasar per gram secara manual — hubungi kami jika butuh bantuan.</div>
+        </div>
+
+        <!-- Contact form -->
+        <form id="contactForm" class="max-w-lg mx-auto space-y-3" onsubmit="return false;" aria-labelledby="contactFormHeading">
+          <h3 id="contactFormHeading" class="sr-only">Form Kontak</h3>
+          <input id="name" name="name" placeholder="Nama" class="w-full p-3 rounded bg-gray-800 border border-yellow-700 text-white" aria-label="Nama" />
+          <input id="phone" name="phone" placeholder="Nomor Telepon" class="w-full p-3 rounded bg-gray-800 border border-yellow-700 text-white" aria-label="Nomor Telepon" />
+          <textarea id="desc" name="desc" placeholder="Deskripsi emas (jenis, berat, kondisi)" class="w-full p-3 rounded bg-gray-800 border border-yellow-700 text-white" aria-label="Deskripsi emas"></textarea>
+          <div class="flex gap-3">
+            <button id="sendForm" class="flex-1 bg-yellow-500 text-black py-3 rounded font-semibold" type="submit">Kirim Sekarang</button>
+            <a id="waDirect" href="#" class="flex-1 bg-green-600 text-white py-3 rounded text-center" target="_blank" rel="noopener">Chat via WhatsApp</a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- FOOTER (unchanged) -->
+    <footer class="py-10 bg-black section-transition">
+      <div class="max-w-6xl mx-auto px-4 text-center text-gray-300">
+        <div class="text-xl font-playfair text-yellow-400 mb-2">Solusi Emas</div>
+        <div>© 2025 Solusi Emas — Menerima emas dari semua toko dengan kondisi apapun.</div>
+        <div class="mt-2 text-sm">Kontak: +62 812 3456 7890 | Jl. Emas No.123, Jakarta</div>
+        <div class="mt-2">
+          Ikuti kami:
+          <a href="https://instagram.com/solusiemas.ind" target="_blank" rel="noopener" class="text-yellow-400 ml-2">@solusiemas.ind</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Floating WhatsApp (replace WA_NUMBER below) -->
+  <a id="waFloat" class="wa-float" href="#" aria-label="Chat via WhatsApp" target="_blank" rel="noopener">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 11.5A9.5 9.5 0 1 0 3.5 21l-.5 1.5 1.2-.3A9.5 9.5 0 0 0 21 11.5z" stroke="#fff" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="font-semibold text-sm">Chat</span>
+  </a>
+
+  <!-- Lightbox (for future gallery) -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-hidden="true"></div>
+
+  <!-- SCRIPTS: lazy video, calc, UI + spin/fade control -->
+  <script>
+    /* ================== CONFIG ==================
+       Update these:
+       - WA_NUMBER: phone without + or spaces, e.g. 6281234567890
+       - Replace assets/hero-video.webm, .mp4, and hero-poster.jpg
+    ============================================= */
+    const WA_NUMBER = '6281234567890'; // <-- REPLACE (used to build WA link)
+
+    /* ------------ Hero video lazy-load ------------- */
+    (function initHeroVideo(){
+      const video = document.querySelector('.hero-video');
+      if(!video) return;
+      const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(!isMobile && !prefersReduced){
+        const webm = video.dataset.srcWebm || video.getAttribute('data-src-webm');
+        const mp4  = video.dataset.srcMp4  || video.getAttribute('data-src-mp4');
+        if(webm){ const s1 = document.createElement('source'); s1.src = webm; s1.type='video/webm'; video.appendChild(s1); }
+        if(mp4){  const s2 = document.createElement('source'); s2.src = mp4; s2.type='video/mp4'; video.appendChild(s2); }
+        video.preload = 'auto';
+        video.play().catch(()=>{/* autoplay blocked; ignore */});
+      } else {
+        // show fallback image and hide video
+        document.querySelectorAll('.hero-fallback').forEach(el => el.style.display = 'block');
+        if(video) video.style.display = 'none';
+      }
+    })();
+
+    /* ------------ Calculator (manual price only) ------------- */
+    document.getElementById('calcBtn').addEventListener('click', () => {
+      const priceInput = document.getElementById('marketPrice').value;
+      const marketPrice = Number(priceInput);
+      const weight = parseFloat(document.getElementById('weight').value || 0);
+      const karat = Number(document.getElementById('karat').value || 24);
+      const condition = document.getElementById('condition').value;
+      const out = document.getElementById('calcResult');
+
+      // validation
+      if (!priceInput || isNaN(marketPrice) || marketPrice <= 0) {
+        out.textContent = 'Masukkan harga pasar per gram (Rp) terlebih dahulu.';
+        return;
+      }
+      if(!weight || weight <= 0){
+        out.textContent = 'Masukkan berat emas yang valid (lebih dari 0).';
+        return;
+      }
+
+      const purity = karat / 24;
+      const conditionFactor = (condition === 'rusak') ? 0.95 : 1; // contoh: 5% potongan kalau rusak
+      const gross = weight * purity * marketPrice;
+      const net = Math.round(gross * conditionFactor);
+
+      out.innerHTML = `Estimasi Harga: <strong>Rp ${net.toLocaleString('id-ID')}</strong>
+        <div class="text-sm text-gray-400">Gross: Rp ${Math.round(gross).toLocaleString('id-ID')}</div>`;
+    });
+
+    /* ------------ WA links (header/button & floating) ------------- */
+    function waLinkWithMsg(msg){
+      const base = `https://wa.me/${WA_NUMBER}?text=`;
+      return base + encodeURIComponent(msg || 'Halo Solusi Emas, saya ingin menanyakan estimasi emas.');
+    }
+    // set direct WA link in contact area
+    const waDirectEl = document.getElementById('waDirect');
+    if(waDirectEl) waDirectEl.href = waLinkWithMsg();
+
+    // floating WA button
+    const waFloat = document.getElementById('waFloat');
+    if(waFloat) waFloat.href = waLinkWithMsg();
+
+    /* ------------ Section reveal (intersection observer) -------------
+       Reveal sections & cards with fade-in. .section-transition elements are observed.
+    --------------------------------------------------------------- */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if(e.isIntersecting) {
+          e.target.classList.add('visible');
+          // reveal immediate children cards (if any) with small stagger
+          const children = Array.from(e.target.querySelectorAll('.card-hover, .p-6'));
+          children.forEach((c, i) => setTimeout(()=> c.classList.add('visible'), i * 80));
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.section-transition').forEach(s => io.observe(s));
+
+    /* ------------ Accessibility niceties ------------- */
+    // smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+      const href = a.getAttribute('href'); if(!href || href === '#') return;
+      const target = document.querySelector(href);
+      if(target){ e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    }));
+
+    // keyboard activation for buttons
+    document.addEventListener('keydown', e => {
+      if(e.key === 'Enter' && document.activeElement.tagName === 'BUTTON') document.activeElement.click();
+    });
+
+    /* ------------ Respect prefers-reduced-motion: pause spin icons on reduce ------------- */
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    function handleReducedMotion(e){
+      if(e.matches){
+        document.querySelectorAll('.spin-icon').forEach(el => {
+          el.style.animation = 'none';
+        });
+      } else {
+        document.querySelectorAll('.spin-icon').forEach(el => {
+          el.style.animation = '';
+        });
+      }
+    }
+    handleReducedMotion(mq);
+    mq.addEventListener('change', handleReducedMotion);
+
+    /* ------------ Lightbox placeholder (gallery future) ------------- */
+    const lightbox = document.getElementById('lightbox');
+    // show/hide functions could be added when gallery implemented
+  </script>
+</body>
+</html>
